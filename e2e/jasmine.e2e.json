@@ -1,0 +1,12 @@
+{
+  "spec_dir": "e2e",
+  "spec_files": [
+    "**/*.e2e.ts"
+  ],
+  "helpers": [
+    "../spec/utils/**/*.ts",
+    "utils/**/*.ts"
+  ],
+  "stopSpecOnExpectationFailure": false,
+  "random": false
+}

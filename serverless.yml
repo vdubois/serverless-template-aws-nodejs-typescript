@@ -1,0 +1,48 @@
+service: encheres
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: development
+  environment:
+    DYNAMODB_TABLE: ${opt:stage, self:provider.stage}-sample-table
+  region: eu-west-3
+  timeout: 10
+  tracing: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
+      Resource:
+        - Fn::Join:
+          - ""
+          - - "arn:aws:dynamodb:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":table/${self:provider.environment.DYNAMODB_TABLE}"
+    - Effect: "Allow"
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
+
+plugins:
+  - serverless-webpack
+  - serverless-plugin-tracing
+
+functions:
+  sample-lambda:
+    handler: src/domain/lambdas/lambda.handler
+    events:
+      - http:
+          path: /v1/lambda
+          method: get
+          cors: true
