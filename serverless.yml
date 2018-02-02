@@ -37,6 +37,7 @@ provider:
 plugins:
   - serverless-webpack
   - serverless-plugin-tracing
+  - serverless-prune-plugin
 
 functions:
   sample-lambda:
@@ -46,3 +47,8 @@ functions:
           path: /v1/lambda
           method: get
           cors: true
+
+custom:
+  prune:
+    automatic: true
+    number: 2
