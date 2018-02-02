@@ -1,5 +1,6 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     externals: [
@@ -33,9 +34,16 @@ module.exports = {
             use: [{
                 loader: 'ts-loader',
                 options: {
-                    configFile: 'tsconfig.webpack.json'
+                    configFile: 'tsconfig.webpack.json',
+                    happyPackMode: true,
+                    transpileOnly: true
                 }
             }]
         }]
-    }
+    },
+    plugins: [
+        new UglifyJsPlugin({
+            parallel: true
+        })
+    ]
 };
